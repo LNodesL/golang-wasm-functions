@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go WebAssembly POC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .demo-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            font-size: 16px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-label {
+            color: #666;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .result-value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .loading {
+            color: #667eea;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Go WebAssembly POC</h1>
+        <p class="subtitle">Demonstrating Go compiled to WebAssembly running in the browser</p>
+        
+        <div id="loading" class="demo-section">
+            <p class="loading">Loading WebAssembly module...</p>
+        </div>
+        
+        <div id="demos" style="display: none;">
+            <!-- Addition Demo -->
+            <div class="demo-section">
+                <h2>1. Addition</h2>
+                <div class="input-group">
+                    <input type="number" id="add1" placeholder="First number" value="42">
+                    <input type="number" id="add2" placeholder="Second number" value="58">
+                    <button onclick="demoAdd()">Add</button>
+                </div>
+                <div class="result">
+                    <span class="result-label">Result:</span>
+                    <span class="result-value" id="addResult">-</span>
+                </div>
+            </div>
+            
+            <!-- Greeting Demo -->
+            <div class="demo-section">
+                <h2>2. Greeting</h2>
+                <div class="input-group">
+                    <input type="text" id="greetName" placeholder="Enter your name" value="Go Developer">
+                    <button onclick="demoGreet()">Greet</button>
+                </div>
+                <div class="result">
+                    <span class="result-label">Result:</span>
+                    <span class="result-value" id="greetResult">-</span>
+                </div>
+            </div>
+            
+            <!-- Fibonacci Demo -->
+            <div class="demo-section">
+                <h2>3. Fibonacci Sequence</h2>
+                <div class="input-group">
+                    <input type="number" id="fibN" placeholder="Nth Fibonacci number" min="0">
+                    <button onclick="demoFibonacci()">Calculate</button>
+                </div>
+                <div class="result">
+                    <span class="result-label">Result:</span>
+                    <span class="result-value" id="fibResult">-</span>
+                </div>
+            </div>
+            
+            <!-- Reverse String Demo -->
+            <div class="demo-section">
+                <h2>4. Reverse String</h2>
+                <div class="input-group">
+                    <input type="text" id="reverseInput" placeholder="Enter text to reverse" value="WebAssembly">
+                    <button onclick="demoReverse()">Reverse</button>
+                </div>
+                <div class="result">
+                    <span class="result-label">Result:</span>
+                    <span class="result-value" id="reverseResult">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="wasm_exec.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
